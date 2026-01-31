@@ -37,3 +37,13 @@ Analytics
 
 Automation
 - Automated batch execution of the ETL pipeline using OS-level scheduling to simulate production-style data workflows
+
+How to Run the Pipeline
+1. Place the raw sales data file at: data/raw/sales_data.csv
+2. (Optional) Create and activate a virtual environment:
+    python -m venv venv
+    source venv/bin/activate
+3. Install required dependencies:
+    pip install -r requirements.txt
+4. Execute the end-to-end pipeline:
+    ./scripts/run_pipeline.sh
