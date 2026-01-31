@@ -14,7 +14,7 @@ def transform_sales_data(raw_df: pd.DataFrame) -> pd.DataFrame:
     df = raw_df.copy()
 
     # Standardize column names
-    df.columns = [col.lower() for col in df.columns]
+    df.columns = [col.lower().replace(" ", "_") for col in df.columns]
 
     # Drop records with missing critical fields
     required_columns = [
