@@ -12,7 +12,7 @@ CREATE TABLE dim_product (
     product_name VARCHAR(100),
     category VARCHAR(50),
     unit_price DECIMAL(10,2)
-)
+);
 
 
 CREATE TABLE dim_date (
