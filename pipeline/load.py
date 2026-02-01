@@ -2,40 +2,63 @@ import pyodbc
 import pandas as pd
 
 
-def load_fact_sales(df: pd.DataFrame, connection_string: str) -> None:
+def load_sales_data(tables: dict):
     """
-    Load transformed sales data into fact_sales table.
-
-    Args:
-        df (pd.DataFrame): Transformed sales dataframe
-        connection_string (str): SQL Server connection string
+    Load fact and dimension tables into SQL Server.
     """
 
-    conn = pyodbc.connect(connection_string)
+    conn = pyodbc.connect(
+        "DRIVER={ODBC Driver 17 for SQL Server};"
+        "SERVER=localhost;"
+        "DATABASE=sales_dw;"
+        "Trusted_Connection=yes;"
+    )
     cursor = conn.cursor()
 
-    insert_query = """
-        INSERT INTO fact_sales (
-            sales_id,
-            date_id,
-            customer_id,
-            product_id,
-            quantity,
-            total_amount
-        )
-        VALUES (?, ?, ?, ?, ?, ?)
-    """
+    # ------------------------------------
+    # Load Dimension: Customer
+    # ------------------------------------
+    cursor.fast_executemany = True
+    cursor.executemany(
+        """
+        INSERT INTO dim_customer (customer_id, customer_name, region, country)
+        VALUES (?, ?, ?, ?)
+        """,
+        tables["dim_customer"].values.tolist()
+    )
 
-    for index, row in df.iterrows():
-        cursor.execute(
-            insert_query,
-            int(index),
-            int(row["order_date"].strftime("%Y%m%d")),
-            int(row["customer_id"]),
-            int(row["product_id"]),
-            int(row["quantity"]),
-            float(row["total_amount"])
-        )
+    # ------------------------------------
+    # Load Dimension: Product
+    # ------------------------------------
+    cursor.executemany(
+        """
+        INSERT INTO dim_product (product_id, product_name, category, sub_category)
+        VALUES (?, ?, ?, ?)
+        """,
+        tables["dim_product"].values.tolist()
+    )
+
+    # ------------------------------------
+    # Load Dimension: Date
+    # ------------------------------------
+    cursor.executemany(
+        """
+        INSERT INTO dim_date (date_id, full_date, year, month, day, weekday)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        tables["dim_date"].values.tolist()
+    )
+
+    # ------------------------------------
+    # Load Fact: Sales
+    # ------------------------------------
+    cursor.executemany(
+        """
+        INSERT INTO fact_sales (date_id, customer_id, product_id, quantity, total_amount)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        tables["fact_sales"].values.tolist()
+    )
 
     conn.commit()
     cursor.close()
