@@ -90,8 +90,9 @@ def transform_sales_data(raw_df: pd.DataFrame) -> dict:
     # Step 7: Return structured output
     # ------------------------------------
     return {
-        "dim_customer": dim_customer,
-        "dim_product": dim_product,
-        "dim_date": dim_date,
-        "fact_sales": fact_sales
-    }
+        "dim_customer": dim_customer_df,
+        "dim_product": dim_product_df,
+        "dim_date": dim_date_df,
+        "fact_sales": fact_sales_df
+}
+
