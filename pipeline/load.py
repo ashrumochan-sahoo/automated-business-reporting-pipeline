@@ -6,24 +6,24 @@ def load_sales_data(tables: dict):
     """
     Load fact and dimension tables into SQL Server.
     """
-    
-conn = pyodbc.connect(
-    "DRIVER={ODBC Driver 18 for SQL Server};"
-    "SERVER=localhost,1433;"
-    "DATABASE=sales_db;"
-    "UID=sa;"
-    "PWD=StrongP@ssw0rd!;"
-    "TrustServerCertificate=yes;"
-)
+
+    conn = pyodbc.connect(
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        "SERVER=localhost,1433;"
+        "DATABASE=sales_db;"
+        "UID=sa;"
+        "PWD=StrongP@ssw0rd!;"
+        "TrustServerCertificate=yes;"
+    )
 
     print("SQL Server connection successful")
 
     cursor = conn.cursor()
+    cursor.fast_executemany = True
 
     # ------------------------------------
     # Load Dimension: Customer
     # ------------------------------------
-    cursor.fast_executemany = True
     cursor.executemany(
         """
         INSERT INTO dim_customer (customer_id, customer_name, region, country)
