@@ -14,4 +14,8 @@ def run_pipeline():
 
 
 if __name__ == "__main__":
-    run_pipeline()
+    def run_pipeline():
+        raw_df = extract_sales_data("data/raw/sales_data.csv")
+        tables = transform_sales_data(raw_df)
+        load_sales_data(tables)
+
