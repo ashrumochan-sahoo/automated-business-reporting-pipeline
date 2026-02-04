@@ -12,7 +12,7 @@ CONNECTION_STRING = (
 )
 
 def run_pipeline():
-    raw_df = extract_sales_data("data/raw/sales_data.csv")
+    raw_df = extract_sales_data("data/raw/sales_data_1.csv")
     transformed_df = transform_sales_data(raw_df)
     load_fact_sales(transformed_df, CONNECTION_STRING)
 
