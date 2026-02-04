@@ -6,13 +6,18 @@ def load_sales_data(tables: dict):
     """
     Load fact and dimension tables into SQL Server.
     """
+    
+conn = pyodbc.connect(
+    "DRIVER={ODBC Driver 18 for SQL Server};"
+    "SERVER=localhost,1433;"
+    "DATABASE=sales_db;"
+    "UID=sa;"
+    "PWD=StrongP@ssw0rd!;"
+    "TrustServerCertificate=yes;"
+)
 
-    conn = pyodbc.connect(
-        "DRIVER={ODBC Driver 17 for SQL Server};"
-        "SERVER=localhost;"
-        "DATABASE=sales_dw;"
-        "Trusted_Connection=yes;"
-    )
+    print("SQL Server connection successful")
+
     cursor = conn.cursor()
 
     # ------------------------------------
